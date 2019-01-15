@@ -3,12 +3,15 @@ package chess;
 import javax.swing.*;
 import java.awt.*;
 
-class Board{
+class Board extends JFrame{
+	Board board;
 
 	public static void main(String[] args){
 		StartScreen screen = new StartScreen();
+
 	}
-	
+
+
 	static class StartScreen{
 		JFrame frame;
 		Game board;
@@ -16,7 +19,6 @@ class Board{
 		StartScreen(){
 			frame = new JFrame();
 			frame.setTitle("Chess");
-	      	frame.setPreferredSize(new Dimension(1088,1088));
 	     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setResizable(false);
 			board = new Game();
