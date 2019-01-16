@@ -9,21 +9,26 @@ class Game extends JPanel{
 	static final boolean WHITE_BOARD = true;
 	
 	Game() {
-		add(new visuals());
+		add(new visuals(WHITE_BOARD));
 	}
 
+
+
 	static class visuals extends JComponent{
-		visuals() {
+		boolean boardOrient = WHITE_BOARD;
+
+		visuals(boolean side) {
 			setPreferredSize(new Dimension(576,576));
+			boardOrient = side;
 		}
 
 		@Override
 		public void paintComponent(Graphics g){
 			super.paintComponents(g);
-			drawBoard(g, BLACK_BOARD);
+			drawBoard(g);
 		}
 
-		private static void drawBoard(Graphics g, boolean boardOrient){
+		private void drawBoard(Graphics g){
 			g.setColor(new Color(24,94,48));
 			g.fillRect(0,0,576,576);
 			for (int i = 0; i < 8; i ++){
@@ -46,7 +51,7 @@ class Game extends JPanel{
 			}
 			
 			g.setColor(Color.WHITE);	
-			String[] letters = {"H","G","F","E","D","C","B","A"};
+			String[] letters = {"h","g","f","e","d","c","b","a"};
 			if (boardOrient==WHITE_BOARD){
 				for (int i = 0; i < 8; i++){
 					g.drawString(letters[7-i], 32+i*64, 560);
