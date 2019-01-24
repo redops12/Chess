@@ -1,5 +1,6 @@
 package Chess;
 
+//used primarily to simplify selection logic
 class Position{
     int x;
     int y;
