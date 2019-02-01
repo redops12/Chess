@@ -73,7 +73,7 @@ class BoardMaker extends JFrame{
             }
 
             if(x>160 && x<672 && y>32 && y<544){
-                board[7-(y-288)/64][7-(x+96)/64] = selected;
+                board[7-(y-32)/64][7-(x-160)/64] = new Piece(selected);
             }
 			repaint();			
 		}
@@ -109,10 +109,10 @@ class BoardMaker extends JFrame{
 	
 	public BoardMaker() {
         setTitle("Board Maker");
-		setPreferredSize(new Dimension(704,704));
+		setPreferredSize(new Dimension(724,704));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new FlowLayout());
-		
+        setLayout(new FlowLayout());
+
 		JPanel makerPanel = new JPanel();
 		component.setPreferredSize(new Dimension(704,576));
 		component.addMouseListener(mouse);
@@ -160,8 +160,8 @@ class BoardMaker extends JFrame{
 
 				BoardIO.newBoard(board, tempBoardName);
 				setVisible(false);
-				dispose();
-			}
+                System.exit(0);
+            }
 		});
 
 		JPanel buttonPanel = new JPanel();
@@ -234,9 +234,9 @@ class BoardMaker extends JFrame{
 		for (int i = 0; i < 8; i ++){
 			for (int j = 0; j < 8; j++){
 				if ((i+j)%2 == 0){
+                    g.setColor(new Color(210,180,140));
+                } else {
 					g.setColor(new Color(160,82,45));
-				} else {
-					g.setColor(new Color(210,180,140));
 				}
 				g.fillRect(i*64+160, j*64+32, 64, 64);
 			}

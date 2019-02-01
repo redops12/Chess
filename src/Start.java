@@ -40,30 +40,29 @@ class Start{
 		panel.add(blackSide, constraints);
 
 
-		JTextField name_white = new JTextField("White     ");
+		JTextField nameWhite = new JTextField("White     ");
 		constraints.gridx = 2;
 		constraints.gridy = 2;
-		panel.add(name_white, constraints);
+		panel.add(nameWhite, constraints);
 		
-		JTextField name_black = new JTextField("Black     ");
+		JTextField nameBlack = new JTextField("Black     ");
 		constraints.gridx = 3;
 		constraints.gridy = 2;
-		panel.add(name_black, constraints);
+		panel.add(nameBlack, constraints);
 		
 		JButton start = new JButton("Start Game");
 		
-		File[] boardFiles = null;
+		File[] boardFiles = {new File("resources" + File.separator + "boards" + File.separator + "DefaultBoard.brd")};
 		try {
 			boardFiles = BoardIO.availableBoards();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		} catch (Exception e){}
 		String[] boardNames = new String[boardFiles.length];
 		for (int i = 0; i<boardFiles.length; i++){
 			boardNames[i] = boardFiles[i].getName().replace(".brd", "");
 		}
 		
 		JComboBox boards = new JComboBox(boardNames);
+		boards.setSelectedItem("DefaultBoard");
 		constraints.gridx = 1;
 		constraints.gridy = 3;
 		panel.add(boards, constraints);
@@ -91,11 +90,11 @@ class Start{
 			public void actionPerformed(ActionEvent e) {
 				Piece[][] startingBoard = null;
 				try {
-					startingBoard = BoardIO.readBoard(boards.getSelectedItem().toString());
+					startingBoard = BoardIO.readBoard(boards.getSelectedItem().toString() + ".brd");
 				} catch (Exception ex){
 					ex.printStackTrace();
 				}
-				Window window = new Window(name_white.getText(), name_black.getText(), startingBoard);
+				Window window = new Window(nameWhite.getText(), nameBlack.getText(), startingBoard);
 				frame.setVisible(false);
 			}
 		});

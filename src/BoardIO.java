@@ -3,24 +3,7 @@ package Chess;
 import java.io.*;
 import java.util.ArrayList;
 
-class BoardIO { 
-    // public static void main(String[] args) throws FileNotFoundException, IOException, ClassCastException{
-    //     System.out.println("test");
-    //     BoardIO boardIO = new BoardIO();
-    //     Piece[][] temp_board = null;
-    //     try {
-    //         temp_board = boardIO.readObjectFromFile("DefaultBoard");
-    //     } catch (Exception e){
-
-    //     }
-    //     for (Piece[] row : temp_board){
-    //         for (Piece piece : row){
-    //             System.out.println(piece.pieceType);
-    //         }
-    //     }
-    //     // boardIO.WriteObjectToFile(defaultBoard, "DefaultBoard");
-    // }
- 
+class BoardIO {  
     static public void newBoard(Object board, String boardName) {
  
         try {
