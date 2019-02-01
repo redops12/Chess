@@ -15,7 +15,7 @@ class Start{
 		JFrame frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(135,206,250));
 		frame.setTitle("New Chess Game");
-		frame.setPreferredSize(new Dimension(350,150));
+		frame.setPreferredSize(new Dimension(400,150));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -55,10 +55,12 @@ class Start{
 		File[] boardFiles = null;
 		try {
 			boardFiles = BoardIO.availableBoards();
-		} catch (Exception e){}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		String[] boardNames = new String[boardFiles.length];
 		for (int i = 0; i<boardFiles.length; i++){
-			boardNames[i] = boardFiles[i].getName();
+			boardNames[i] = boardFiles[i].getName().replace(".brd", "");
 		}
 		
 		JComboBox boards = new JComboBox(boardNames);
@@ -89,7 +91,6 @@ class Start{
 			public void actionPerformed(ActionEvent e) {
 				Piece[][] startingBoard = null;
 				try {
-					System.out.println(boards.getSelectedItem().toString());
 					startingBoard = BoardIO.readBoard(boards.getSelectedItem().toString());
 				} catch (Exception ex){
 					ex.printStackTrace();
