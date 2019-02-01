@@ -31,4 +31,14 @@ class Position{
         this.x = pos.x;
         this.y = pos.y;
     }
+
+    //returns a string position in classic chess style
+    char[] letters = {'a','b','c','d','e','f','g','h'};
+    String toBoardPos(Side side){
+        if (side == Side.BLACK_SIDE){
+            return (letters[7-x] + "" + (y+1));
+        } else {
+            return (letters[x] + "" + (8-y));
+        }
+    }
 }

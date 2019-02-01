@@ -16,7 +16,6 @@ class Piece{
         this.color = piece.color;
     }
 
-    //simplifies and shortens code
     boolean empty(){
         return pieceType == PieceType.EMPTY;
     }

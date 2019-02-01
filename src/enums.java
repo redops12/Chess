@@ -6,5 +6,5 @@ enum PieceType {
 }
 
 enum Side{
-    BLACK_SIDE, WHITE_SIDE, NONE;
+    BLACK_SIDE, WHITE_SIDE, NONE/*None is never used for the whole board, just for empty pieces*/;
 }

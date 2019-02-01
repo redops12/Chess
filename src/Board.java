@@ -19,6 +19,10 @@ class Board{
     private Piece[][] board;
     private Side orient;
     private Side opposingSide;
+    public Position previousStartPos = new Position(-1,-1);
+    public Position previousEndPos = new Position(-1,-1);
+    private ArrayList<Piece> whiteTakenPieces = new ArrayList<Piece>();
+    private ArrayList<Piece> blackTakenPieces = new ArrayList<Piece>();
 
     //constructor
     Board(Piece[][] boardType, Side orient){
@@ -39,6 +43,14 @@ class Board{
 		} else {
 			opposingSide = Side.WHITE_SIDE;
 		}
+    }
+
+    //returns the pieces taken by a side
+    ArrayList<Piece> getPiecesTaken(Side color){
+        if (color == Side.WHITE_SIDE){
+            return whiteTakenPieces;
+        } 
+        return blackTakenPieces;
     }
 
     //returns the piece at a specific position on the board
@@ -87,6 +99,15 @@ class Board{
             }
         }
 
+        //adds taken pieces to taken list
+        if (!pieceAt(end_pos).empty()){
+            if (orient == Side.WHITE_SIDE){
+                whiteTakenPieces.add(pieceAt(end_pos));
+            } else {
+                blackTakenPieces.add(pieceAt(end_pos));
+            }
+        }
+
         //replaces piece at end position with piece highlighted
         if (orient == Side.WHITE_SIDE){
             board[7-end_pos.y][7-end_pos.x] = pieceAt(cur_pos);
@@ -108,33 +129,20 @@ class Board{
                 board[end_pos.y][end_pos.x] = new Piece(PieceType.QUEEN,orient);
             }
         }
-        System.out.println(inCheck());        
-    }
 
-    //returns if the king is in check in this position
-    boolean inCheck(){
-        Position kingPos = new Position(-1,-1);
-        for (int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                if (board[i][j].pieceType == PieceType.KING && board[i][j].color == orient){
-                    kingPos = new Position(j, i);
-                }
+        //passant move
+        if (!previousEndPos.equals(-1, -1) && pieceAt(end_pos).pieceType == PieceType.PAWN && pieceAt(new Position(7-previousEndPos.x,7-previousEndPos.y)).pieceType == PieceType.PAWN && pieceAt(new Position(7-previousEndPos.x,7-previousEndPos.y)).color == opposingSide && end_pos.x == 7-previousEndPos.x && end_pos.y == 6-previousEndPos.y){
+            if (orient == Side.WHITE_SIDE){
+                whiteTakenPieces.add(pieceAt(previousEndPos));
+                board[previousEndPos.y][previousEndPos.x] = new Piece(PieceType.EMPTY,Side.NONE); 
+            } else {
+                blackTakenPieces.add(pieceAt(previousEndPos));
+                board[7-previousEndPos.y][7-previousEndPos.x] = new Piece(PieceType.EMPTY,Side.NONE); 
             }
         }
-        for (int i = 0; i < 8; i++){
-            for (int j = 0; j < 8; j++){
-                if (board[j][i].color == opposingSide){
-                    ArrayList<Position> moves = getMoves(new Position(i, j));
-                    for (Position k : moves){
-                        if (k.equals(kingPos)){
-                            System.out.println(i + "," + j);
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+            
+        previousEndPos = end_pos.copy();
+        previousStartPos = cur_pos.copy();
     }
 
     //used to apply a move to a position
@@ -157,6 +165,92 @@ class Board{
 	Position[] translations = {new Position(1,0),new Position(1,1),new Position(0,1),new Position(-1,1),new Position(-1,0),new Position(-1,-1),new Position(0,-1),new Position(1,-1)};
 	Position[] knight_translations = {new Position(2,1),new Position(1,2),new Position(-2,1),new Position(1,-2),new Position(-1,-2),new Position(-2,-1),new Position(2,-1),new Position(-1,2)};
     
+    //returns if the king is in check in this position
+    boolean inCheck(){
+        Position kingPos = new Position(-1,-1);
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                if (board[i][j].pieceType == PieceType.KING && board[i][j].color == orient){
+                    if (orient == Side.BLACK_SIDE){
+                        kingPos = new Position(j, i);
+                    } else {
+                        kingPos = new Position(7-j,7-i);
+                    }
+                }
+            }
+        }
+        
+        Position temp_move = new Position(0,0);
+        for (Position i : translations){
+            temp_move = translate(kingPos,i);
+            if (valid(temp_move) && pieceAt(temp_move).pieceType == PieceType.KING && pieceAt(temp_move).color == opposingSide){
+                return true;
+            }	
+        }
+    
+        for (Position i : translations){
+            temp_move = kingPos;
+            do {
+                temp_move = translate(temp_move,i);
+                if (valid(temp_move) && pieceAt(temp_move).pieceType == PieceType.QUEEN && pieceAt(temp_move).color == opposingSide){
+                    return true;
+                }
+            } while (valid(temp_move) && pieceAt(temp_move).empty());
+        }
+    
+        for (int index = 1; index<translations.length;index+=2){
+            Position i = translations[index];
+            temp_move = kingPos;
+            do {
+                temp_move = translate(temp_move,i);
+                if (valid(temp_move) && pieceAt(temp_move).pieceType == PieceType.BISHOP && pieceAt(temp_move).color == opposingSide){
+                    return true;
+                }
+            } while (valid(temp_move) && pieceAt(temp_move).empty());
+        }
+    
+        for (Position i : knight_translations){
+            temp_move = translate(kingPos,i);
+            if (valid(temp_move) && pieceAt(temp_move).pieceType == PieceType.KNIGHT && pieceAt(temp_move).color == opposingSide){
+                return true;
+            }	
+        }
+    
+        for (int index = 0; index<translations.length;index+=2){
+            Position i = translations[index];
+            temp_move = kingPos;
+            do {
+                temp_move = translate(temp_move,i);
+                if (valid(temp_move) && pieceAt(temp_move).pieceType == PieceType.ROOK && pieceAt(temp_move).color == opposingSide){
+                    return true;
+                }
+            }while (valid(temp_move) && pieceAt(temp_move).empty());
+        }
+            
+        temp_move = translate(kingPos, new Position(-1,-1));
+        if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).color == opposingSide){
+            return true;
+        }
+        temp_move = translate(kingPos, new Position(1,-1));
+        if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).color == opposingSide){
+            return true;
+        }
+        return false;
+    }
+
+    boolean noMoves(){
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (pieceAt(new Position(i, j)).color == orient){
+                    if (getMoves(new Position(i,j)).size() > 0){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     //switch to find valid moves for all pieces
     ArrayList<Position> getMoves(Position pos){
 		ArrayList<Position> moves = new ArrayList<Position>();
@@ -250,28 +344,30 @@ class Board{
 				if (!temp_piece.moved){
 					temp_move = translate(pos, new Position(0,-2));
 					if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).empty() && pieceAt(translate(pos,new Position(0,-1))).empty()){
-						moves.add(temp_move);
+                        moves.add(temp_move);
 					}
 				}
 				temp_move = translate(pos, new Position(0,-1));
 				if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).empty())
 					moves.add(temp_move);
 					
-				temp_move = translate(pos, new Position(-1,-1));
-				if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).color == opposingSide)
+                temp_move = translate(pos, new Position(-1,-1));
+                Position passant = translate(pos, new Position(-1,0));
+				if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && (pieceAt(temp_move).color == opposingSide || pieceAt(passant).color == opposingSide))
 					moves.add(temp_move);
-				temp_move = translate(pos, new Position(1,-1));
-				if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && pieceAt(temp_move).color == opposingSide)
+                temp_move = translate(pos, new Position(1,-1));
+                passant = translate(pos, new Position(1,0));
+				if (temp_move.x >= 0 && temp_move.x <= 7 && temp_move.y >= 0 && temp_move.y <= 7 && (pieceAt(temp_move).color == opposingSide || pieceAt(passant).color == opposingSide))
 					moves.add(temp_move);
         }
-        // for (int i = 0; i < moves.size(); i++){
-        //     Board temp = copy();
-        //     temp.move(pos,moves.get(i));
-        //     if (temp.inCheck()){
-        //         moves.remove(i);
-        //         i--;
-        //     }
-        // }
+        for (int i = 0; i < moves.size(); i++){
+            Board temp = copy();
+            temp.move(pos,moves.get(i));
+            if (temp.inCheck()){
+                moves.remove(i);
+                i--;
+            }
+        }
         return moves; 
 	}
 }

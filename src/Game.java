@@ -1,6 +1,7 @@
 package Chess;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.imageio.ImageIO;
@@ -11,9 +12,13 @@ import java.io.File;
 import java.awt.Image;
 
 class Game extends JComponent{
-	//which side the game is being played by/against
-	Side boardOrient;
-	Side opposingSide;
+	//names for the sides
+	String white_name;
+	String black_name;
+
+	//which side the game is being currently played by/against
+	Side boardOrient = Side.WHITE_SIDE;
+	Side opposingSide = Side.BLACK_SIDE;
 
 	//selected piece position
 	Position selected = new Position(-1,-1);
@@ -48,10 +53,11 @@ class Game extends JComponent{
 	
 		@Override
 		public void mousePressed(MouseEvent e) {
-			if (e.getX() <= 32 || e.getX() >= 544 || e.getY() <= 32 || e.getY() >= 544) return;
+			if (e.getX() <= 128 || e.getX() >= 640 || e.getY() <= 32 || e.getY() >= 544) return;
 	
-			Position temp_clicked = new Position((e.getX()-32)/64,(e.getY()-32)/64);
+			Position temp_clicked = new Position((e.getX()-128)/64,(e.getY()-32)/64);
 			Position temp_selected = new Position(-1,-1);
+			//decides whether to change selected square or unselect
 			if ((board.pieceAt(temp_clicked).empty() || board.pieceAt(temp_clicked).color == opposingSide) && !selected.equals(-1,-1)){
 				for (Position i : moves){
 					if (temp_clicked.equals(i)){
@@ -66,11 +72,28 @@ class Game extends JComponent{
 			} else if (board.pieceAt(temp_clicked).color==boardOrient && !selected.equals(temp_clicked)){
 				temp_selected = temp_clicked;
 			}
+
+			//handels moves for selecte piece
 			selected.set(temp_selected);
 			if (!selected.equals(-1,-1))
 				moves = board.getMoves(selected);
 			else {
 				moves.clear();
+			}
+			if (board.noMoves()){
+				JFrame endScreen = new JFrame("Game Over");
+				endScreen.setSize(256,256);
+				endScreen.setBackground(Color.YELLOW);
+				JLabel label;
+				if (!board.inCheck()){
+					label = new JLabel("Stalemate"); 
+				} else if (boardOrient == Side.WHITE_SIDE){
+					label = new JLabel("Black Wins!");
+				} else {
+					label = new JLabel("White Wins!");
+				}
+				endScreen.add(label);
+				endScreen.setVisible(true);
 			}
 			repaint();			
 		}
@@ -91,17 +114,21 @@ class Game extends JComponent{
 	};
 	
 	//constructor, mostly just sets sides and imports the images
-	public Game(Side side) {
-		setPreferredSize(new Dimension(576,576));
+	public Game(String whiteName, String blackName) {
+		setPreferredSize(new Dimension(672,576));
 		addMouseListener(mouse);
-		boardOrient = side;
-		if (boardOrient == Side.WHITE_SIDE){
-			opposingSide = Side.BLACK_SIDE;
-		} else {
-			opposingSide = Side.WHITE_SIDE;
-		}
 		board = new Board(Board.defaultBoard, boardOrient);
-
+		if (whiteName.length() > 10){
+			white_name = whiteName.substring(0,9);
+		} else {
+			white_name = whiteName;
+		}
+		if (blackName.length() > 10){
+			black_name = blackName.substring(0,9);
+		} else {
+			black_name = blackName;
+		}
+		//import piece visuals
 		try{
 			blackKing = ImageIO.read(new File("resources/BlackKing.png"));
 			blackQueen = ImageIO.read(new File("resources/BlackQueen.png"));
@@ -131,47 +158,149 @@ class Game extends JComponent{
 	//sets up the background, including the border, squares, numbers on the side, as well as the selected square and available moves
 	private void drawBoard(Graphics g){
 		g.setColor(new Color(24,94,48));
-		g.fillRect(0,0,576,576);
+		g.fillRect(0,0,672,576);
 		for (int i = 0; i < 8; i ++){
 			for (int j = 0; j < 8; j++){
-				if (boardOrient == Side.WHITE_SIDE){
-					if ((i+j)%2 == 0){
-						g.setColor(new Color(160,82,45));
-					} else {
-						g.setColor(new Color(210,180,140));
-					}
+				if ((i+j)%2 == 0){
+					g.setColor(new Color(160,82,45));
 				} else {
-					if ((i+j)%2 == 0){
-						g.setColor(new Color(210,180,140));
-					} else {
-						g.setColor(new Color(160,82,45));
-					}
+					g.setColor(new Color(210,180,140));
 				}
 				if (i == selected.x && j == selected.y){
 					g.setColor(Color.YELLOW);
 				}
-				g.fillRect(i*64+32, j*64+32, 64, 64);
+				g.fillRect(i*64+128, j*64+32, 64, 64);
 			}
 		}
 
+		//highlight move just played
+		g.setColor(Color.YELLOW);
+		if (!board.previousStartPos.equals(-1,-1))
+			g.fillRect((7-board.previousStartPos.x)*64+132, (7-board.previousStartPos.y)*64+36, 56, 56);
+		if (!board.previousEndPos.equals(-1,-1))
+			g.fillRect((7-board.previousEndPos.x)*64+132, (7-board.previousEndPos.y)*64+36, 56, 56);
+
+
+
+		//highlights available moves
 		g.setColor(new Color(135,206,250));
 		for (Position i : moves){
-			g.fillRect(i.x*64+36, i.y*64+36, 56, 56);
+			g.fillRect(i.x*64+132, i.y*64+36, 56, 56);
 		}
 		
+		//coordinates on the side
 		g.setColor(Color.WHITE);	
 		String[] letters = {"h","g","f","e","d","c","b","a"};
 		if (boardOrient==Side.WHITE_SIDE){
 			for (int i = 0; i < 8; i++){
-				g.drawString(letters[7-i], 32+i*64, 560);
-				g.drawString("" + (8-i), 16, 48+i*64);
+				g.drawString(letters[7-i], 128+i*64, 560);
+				g.drawString("" + (8-i), 112, 48+i*64);
 			}
 		} else {
 			for (int i = 0; i < 8; i++){
-				g.drawString(letters[i], 32+i*64, 560);
-				g.drawString("" + (i+1), 16, 48+i*64);
+				g.drawString(letters[i], 128+i*64, 560);
+				g.drawString("" + (i+1), 112, 48+i*64);
 			}
 		}
+
+		//names
+		g.setFont(new Font("TimesRoman", Font.BOLD, 12)); 
+		if (boardOrient==Side.WHITE_SIDE){
+			g.drawString(white_name, 16, 568);
+			g.drawString(black_name, 16, 16);
+		} else {
+			g.drawString(white_name, 16, 16);
+			g.drawString(black_name, 16, 568);
+		}
+
+		ArrayList<Piece> whiteTaken = board.getPiecesTaken(Side.WHITE_SIDE);
+		ArrayList<Piece> blackTaken = board.getPiecesTaken(Side.BLACK_SIDE);
+		if (boardOrient == Side.WHITE_SIDE){
+			for (int i = 0; i < 16; i++){
+				if (i < whiteTaken.size()){
+					g.drawImage(getImage(whiteTaken.get(i)), 16, 528-i*16, 16, 16, null);
+				} else {
+					break;
+				}
+			}
+			for (int i = 0; i < 16; i++){
+				if (i < blackTaken.size()){
+					g.drawImage(getImage(blackTaken.get(i)), 16, 48+i*16, 16, 16, null);
+				} else {
+					break;
+				}
+			}
+		} else {
+			for (int i = 0; i < 16; i++){
+				if (i < whiteTaken.size()){
+					g.drawImage(getImage(whiteTaken.get(i)), 16, 48+i*16, 16, 16, null);
+				} else {
+					break;
+				}
+			}
+			for (int i = 0; i < 16; i++){
+				if (i < blackTaken.size()){
+					g.drawImage(getImage(blackTaken.get(i)), 16, 528-i*16, 16, 16, null);
+				} else {
+					break;
+				}
+			}
+		}
+	}
+
+	//returns the image that corresponds to a specific picece type and color 
+	Image getImage(Piece piece){
+		Image image = null;
+		if (!piece.empty()){
+			if (piece.color == Side.BLACK_SIDE){
+				switch (piece.pieceType){
+					case KING:
+						image = blackKing;
+						break;
+					case QUEEN:
+						image = blackQueen;
+						break;
+					case BISHOP:
+						image = blackBishop;
+						break;
+					case KNIGHT:
+						image = blackKnight;
+						break;
+					case ROOK:
+						image = blackRook;
+						break;
+					case PAWN:
+						image = blackPawn;
+						break;
+					default:
+						image = blackPawn;
+				}
+			} else {
+				switch (piece.pieceType){
+					case KING:
+						image = whiteKing;
+						break;
+					case QUEEN:
+						image = whiteQueen;
+						break;
+					case BISHOP:
+						image = whiteBishop;
+						break;
+					case KNIGHT:
+						image = whiteKnight;
+						break;
+					case ROOK:
+						image = whiteRook;
+						break;
+					case PAWN:
+						image = whitePawn;
+						break;
+					default: 
+						image = blackPawn;
+				}
+			}
+		}
+		return image;
 	}
 
 	//displays all of the pieces on the board
@@ -179,57 +308,7 @@ class Game extends JComponent{
 		for (int i = 0; i < 8; i ++){
 			for (int j = 0; j < 8; j++){
 				Piece temp = board.pieceAt(new Position(i,j));
-				Image image;
-				if (!temp.empty()){
-					if (temp.color == Side.BLACK_SIDE){
-						switch (temp.pieceType){
-							case KING:
-								image = blackKing;
-								break;
-							case QUEEN:
-								image = blackQueen;
-								break;
-							case BISHOP:
-								image = blackBishop;
-								break;
-							case KNIGHT:
-								image = blackKnight;
-								break;
-							case ROOK:
-								image = blackRook;
-								break;
-							case PAWN:
-								image = blackPawn;
-								break;
-							default:
-								image = blackPawn;
-						}
-					} else {
-						switch (temp.pieceType){
-							case KING:
-								image = whiteKing;
-								break;
-							case QUEEN:
-								image = whiteQueen;
-								break;
-							case BISHOP:
-								image = whiteBishop;
-								break;
-							case KNIGHT:
-								image = whiteKnight;
-								break;
-							case ROOK:
-								image = whiteRook;
-								break;
-							case PAWN:
-								image = whitePawn;
-								break;
-							default: 
-								image = blackPawn;
-						}
-					}
-					g.drawImage(image,i*64+32,j*64+32,null);
-				}
+				g.drawImage(getImage(temp),i*64+128,j*64+32,null);
 			}
 		}
 	}

@@ -12,35 +12,59 @@ class StartScreen{
 	//game setup and preferences
 	public static void main(String[] args){
 		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		JTextField name = new JTextField("Name");
+		frame.getContentPane().setBackground(new Color(135,206,250));
+		frame.setTitle("New Chess Game");
+		frame.setPreferredSize(new Dimension(300,150));
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel panel = new JPanel(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.weighty = 1.0;
+		constraints.weightx = 1.0;
+
+		JLabel label  = new JLabel("Game Settings");
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		panel.add(label, constraints);
+
+		JLabel whiteSide  = new JLabel("White");
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		panel.add(whiteSide, constraints);
+		
+		JLabel blackSide = new JLabel("Black");
+		constraints.gridx = 3;
+		constraints.gridy = 1;
+		panel.add(blackSide, constraints);
+
+
+		JTextField name_white = new JTextField("White Name");
+		constraints.gridx = 2;
+		constraints.gridy = 2;
+		panel.add(name_white, constraints);
+		
+		JTextField name_black = new JTextField("Black Name");
+		constraints.gridx = 3;
+		constraints.gridy = 2;
+		panel.add(name_black, constraints);
+		
 		JButton start = new JButton("Start Game");
-		JRadioButton black = new JRadioButton("Black Side");
-		JRadioButton white = new JRadioButton("White Side");
-		ButtonGroup group = new ButtonGroup();
-		group.add(white);
-		group.add(black);
-		white.setSelected(true);
 		start.addActionListener(new ActionListener(){
 		
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Side side = Side.BLACK_SIDE;
-				if (white.isSelected()){
-					side = Side.WHITE_SIDE;
-				}
-				Window window = new Window(side);
+				Window window = new Window(name_white.getText(), name_black.getText());
+				frame.setVisible(false);
 			}
 		});
-		frame.setTitle("New Chess Game");
-		frame.setSize(new Dimension(600,400));
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		panel.add(name);
-		panel.add(white);
-		panel.add(black);
-		panel.add(start);
-		// frame.pack();
+		constraints.gridx = 3;
+		constraints.gridy = 3;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(start, constraints);
+
 		frame.add(panel);
+		frame.pack();
 		frame.setVisible(true);
 	}	
 }	
