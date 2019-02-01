@@ -1,6 +1,10 @@
 package Chess;
 
-class Piece{
+import java.io.Serializable;
+
+class Piece implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     PieceType pieceType;
     Side color;
     public boolean moved = false;
