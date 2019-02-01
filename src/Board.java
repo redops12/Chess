@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 class Board{
     //to be moved to alternate files
-    static final Piece[][] defaultBoard = 
-	{
-		{new Piece(PieceType.ROOK, Side.WHITE_SIDE), new Piece(PieceType.KNIGHT, Side.WHITE_SIDE), new Piece(PieceType.BISHOP, Side.WHITE_SIDE), new Piece(PieceType.QUEEN, Side.WHITE_SIDE), new Piece(PieceType.KING, Side.WHITE_SIDE), new Piece(PieceType.BISHOP, Side.WHITE_SIDE), new Piece(PieceType.KNIGHT, Side.WHITE_SIDE), new Piece(PieceType.ROOK, Side.WHITE_SIDE)},
-		{new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE)},
-		{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
-		{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
-		{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
-		{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
-		{new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE)},
-		{new Piece(PieceType.ROOK, Side.BLACK_SIDE), new Piece(PieceType.KNIGHT, Side.BLACK_SIDE), new Piece(PieceType.BISHOP, Side.BLACK_SIDE), new Piece(PieceType.QUEEN, Side.BLACK_SIDE), new Piece(PieceType.KING, Side.BLACK_SIDE), new Piece(PieceType.BISHOP, Side.BLACK_SIDE), new Piece(PieceType.KNIGHT, Side.BLACK_SIDE), new Piece(PieceType.ROOK, Side.BLACK_SIDE)}
-    };
+    // static final Piece[][] defaultBoard = 
+	// {
+	// 	{new Piece(PieceType.ROOK, Side.WHITE_SIDE), new Piece(PieceType.KNIGHT, Side.WHITE_SIDE), new Piece(PieceType.BISHOP, Side.WHITE_SIDE), new Piece(PieceType.QUEEN, Side.WHITE_SIDE), new Piece(PieceType.KING, Side.WHITE_SIDE), new Piece(PieceType.BISHOP, Side.WHITE_SIDE), new Piece(PieceType.KNIGHT, Side.WHITE_SIDE), new Piece(PieceType.ROOK, Side.WHITE_SIDE)},
+	// 	{new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE), new Piece(PieceType.PAWN, Side.WHITE_SIDE)},
+	// 	{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
+	// 	{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
+	// 	{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
+	// 	{new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE),new Piece(PieceType.EMPTY, Side.NONE)},
+	// 	{new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE), new Piece(PieceType.PAWN, Side.BLACK_SIDE)},
+	// 	{new Piece(PieceType.ROOK, Side.BLACK_SIDE), new Piece(PieceType.KNIGHT, Side.BLACK_SIDE), new Piece(PieceType.BISHOP, Side.BLACK_SIDE), new Piece(PieceType.QUEEN, Side.BLACK_SIDE), new Piece(PieceType.KING, Side.BLACK_SIDE), new Piece(PieceType.BISHOP, Side.BLACK_SIDE), new Piece(PieceType.KNIGHT, Side.BLACK_SIDE), new Piece(PieceType.ROOK, Side.BLACK_SIDE)}
+    // };
 
     private Piece[][] board;
     private Side orient;

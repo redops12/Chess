@@ -10,9 +10,9 @@ class Window extends JFrame{
 	Window window;
 	JPanel panel;
 
-	Window(String white_name, String black_name){		
+	Window(String white_name, String black_name, Piece[][] startingBoard){		
 		frame = new JFrame();
-		board = new Game(white_name, black_name);
+		board = new Game(white_name, black_name, startingBoard);
 		panel = new JPanel();
 
 		panel.add(board);

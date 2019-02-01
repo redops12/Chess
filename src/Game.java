@@ -114,10 +114,10 @@ class Game extends JComponent{
 	};
 	
 	//constructor, mostly just sets sides and imports the images
-	public Game(String whiteName, String blackName) {
+	public Game(String whiteName, String blackName, Piece[][] startBoard) {
 		setPreferredSize(new Dimension(672,576));
 		addMouseListener(mouse);
-		board = new Board(Board.defaultBoard, boardOrient);
+		board = new Board(startBoard, Side.WHITE_SIDE);
 		if (whiteName.length() > 10){
 			white_name = whiteName.substring(0,9);
 		} else {
