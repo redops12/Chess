@@ -31,6 +31,10 @@ class Board{
 			opposingSide = Side.WHITE_SIDE;
 		}
     }
+    
+    Side getOrient(){
+        return orient;
+    }
 
     //returns the pieces taken by a side
     ArrayList<Piece> getPiecesTaken(Side color){
