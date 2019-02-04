@@ -13,8 +13,8 @@ import java.awt.Image;
 
 class Game extends JComponent{
 	//names for the sides
-	String white_name;
-	String black_name;
+	String mWhiteName;
+	String mBlackName;
 
 	//which side the game is being currently played by/against
 	Side boardOrient = Side.WHITE_SIDE;
@@ -55,26 +55,26 @@ class Game extends JComponent{
 		public void mousePressed(MouseEvent e) {
 			if (e.getX() <= 128 || e.getX() >= 640 || e.getY() <= 32 || e.getY() >= 544) return;
 	
-			Position temp_clicked = new Position((e.getX()-128)/64,(e.getY()-32)/64);
-			Position temp_selected = new Position(-1,-1);
+			Position tempClicked = new Position((e.getX()-128)/64,(e.getY()-32)/64);
+			Position tempSelected = new Position(-1,-1);
 			//decides whether to change selected square or unselect
-			if ((board.pieceAt(temp_clicked).empty() || board.pieceAt(temp_clicked).color == opposingSide) && !selected.equals(-1,-1)){
+			if ((board.pieceAt(tempClicked).empty() || board.pieceAt(tempClicked).color == opposingSide) && !selected.equals(-1,-1)){
 				for (Position i : moves){
-					if (temp_clicked.equals(i)){
-						board.move(selected,temp_clicked);
-						Side temp_side = opposingSide;
+					if (tempClicked.equals(i)){
+						board.move(selected,tempClicked);
+						Side tempSide = opposingSide;
 						opposingSide = boardOrient;
-						boardOrient = temp_side;
+						boardOrient = tempSide;
 						board.setOrient(boardOrient);
 					}
 				}
 				moves.clear();
-			} else if (board.pieceAt(temp_clicked).color==boardOrient && !selected.equals(temp_clicked)){
-				temp_selected = temp_clicked;
+			} else if (board.pieceAt(tempClicked).color==boardOrient && !selected.equals(tempClicked)){
+				tempSelected = tempClicked;
 			}
 
 			//handels moves for selecte piece
-			selected.set(temp_selected);
+			selected.set(tempSelected);
 			if (!selected.equals(-1,-1))
 				moves = board.getMoves(selected);
 			else {
@@ -119,14 +119,14 @@ class Game extends JComponent{
 		addMouseListener(mouse);
 		board = new Board(startBoard, Side.WHITE_SIDE);
 		if (whiteName.length() > 10){
-			white_name = whiteName.substring(0,9);
+			mWhiteName = whiteName.substring(0,9);
 		} else {
-			white_name = whiteName;
+			mWhiteName = whiteName;
 		}
 		if (blackName.length() > 10){
-			black_name = blackName.substring(0,9);
+			mBlackName = blackName.substring(0,9);
 		} else {
-			black_name = blackName;
+			mBlackName = blackName;
 		}
 		//import piece visuals
 		try{
@@ -162,9 +162,9 @@ class Game extends JComponent{
 		for (int i = 0; i < 8; i ++){
 			for (int j = 0; j < 8; j++){
 				if ((i+j)%2 == 0){
-					g.setColor(new Color(160,82,45));
-				} else {
 					g.setColor(new Color(210,180,140));
+				} else {
+					g.setColor(new Color(160,82,45));
 				}
 				if (i == selected.x && j == selected.y){
 					g.setColor(Color.YELLOW);
@@ -206,11 +206,11 @@ class Game extends JComponent{
 		//names
 		g.setFont(new Font("TimesRoman", Font.BOLD, 12)); 
 		if (boardOrient==Side.WHITE_SIDE){
-			g.drawString(white_name, 16, 568);
-			g.drawString(black_name, 16, 16);
+			g.drawString(mWhiteName, 16, 568);
+			g.drawString(mBlackName, 16, 16);
 		} else {
-			g.drawString(white_name, 16, 16);
-			g.drawString(black_name, 16, 568);
+			g.drawString(mWhiteName, 16, 16);
+			g.drawString(mBlackName, 16, 568);
 		}
 
 		ArrayList<Piece> whiteTaken = board.getPiecesTaken(Side.WHITE_SIDE);
