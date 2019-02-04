@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.io.File;
 
 class BoardMaker extends JFrame{
-    Rectangle[] whiteRects = {new Rectangle(0,16,64,64),new Rectangle(0,80,64,64),new Rectangle(0,144,64,64),new Rectangle(0,208,64,64),new Rectangle(0,272,64,64),new Rectangle(0,336,64,64), new Rectangle(0,400,64,64)};
+	Rectangle[] whiteRects = {new Rectangle(0,16,64,64),new Rectangle(0,80,64,64),new Rectangle(0,144,64,64),new Rectangle(0,208,64,64),new Rectangle(0,272,64,64),new Rectangle(0,336,64,64), new Rectangle(0,400,64,64)};
     Rectangle[] blackRects = {new Rectangle(64,16,64,64),new Rectangle(64,80,64,64),new Rectangle(64,144,64,64),new Rectangle(64,208,64,64),new Rectangle(64,272,64,64),new Rectangle(64,336,64,64), new Rectangle(64,400,64,64)};
     PieceType[] pieceList = {PieceType.PAWN,PieceType.BISHOP,PieceType.KNIGHT,PieceType.ROOK,PieceType.QUEEN,PieceType.KING};
 	Rectangle eraserRect = new Rectangle(0,464,64,64);
@@ -160,8 +160,8 @@ class BoardMaker extends JFrame{
 
 				BoardIO.newBoard(board, tempBoardName);
 				setVisible(false);
-                System.exit(0);
-            }
+				System.exit(0);
+			}
 		});
 
 		JPanel buttonPanel = new JPanel();

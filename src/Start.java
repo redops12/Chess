@@ -6,7 +6,10 @@ import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.event.ChangeListener;
 
 
 class Start{
@@ -15,7 +18,7 @@ class Start{
 		JFrame frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(135,206,250));
 		frame.setTitle("New Chess Game");
-		frame.setPreferredSize(new Dimension(400,150));
+		frame.setPreferredSize(new Dimension(500,150));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -72,10 +75,23 @@ class Start{
 		constraints.gridy = 3;
 		panel.add(custom, constraints);
 		custom.addActionListener(new ActionListener(){
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BoardMaker customBoard = new BoardMaker();
+				// customBoard.addPropertyChangeListener(new PropertyChangeListener(){
+				// 	@Override
+				// 	public void propertyChange(PropertyChangeEvent evt) {
+				// 		System.out.println(evt.getPropertyName());
+				// 		File[] boardFiles = {new File("resources" + File.separator + "boards" + File.separator + "DefaultBoard.brd")};
+				// 		try {
+				// 			boardFiles = BoardIO.availableBoards();
+				// 		} catch (Exception e){}
+				// 		String[] boardNames = new String[boardFiles.length];
+				// 		for (int i = 0; i<boardFiles.length; i++){
+				// 			boardNames[i] = boardFiles[i].getName().replace(".brd", "");
+				// 		}
+				// 	}
+				// });
 			}
 		});
 		
