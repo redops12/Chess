@@ -219,11 +219,11 @@ class Board{
         }
             
         tempMove = translate(kingPos, new Position(-1,-1));
-        if (tempMove.x >= 0 && tempMove.x <= 7 && tempMove.y >= 0 && tempMove.y <= 7 && pieceAt(tempMove).color == opposingSide){
+        if (tempMove.x >= 0 && tempMove.x <= 7 && tempMove.y >= 0 && tempMove.y <= 7 && pieceAt(tempMove).color == opposingSide && pieceAt(tempMove).pieceType == PieceType.PAWN){
             return true;
         }
         tempMove = translate(kingPos, new Position(1,-1));
-        if (tempMove.x >= 0 && tempMove.x <= 7 && tempMove.y >= 0 && tempMove.y <= 7 && pieceAt(tempMove).color == opposingSide){
+        if (tempMove.x >= 0 && tempMove.x <= 7 && tempMove.y >= 0 && tempMove.y <= 7 && pieceAt(tempMove).color == opposingSide && pieceAt(tempMove).pieceType == PieceType.PAWN){
             return true;
         }
         return false;

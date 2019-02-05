@@ -14,7 +14,7 @@ import javax.swing.event.ChangeListener;
 
 class Start{
 	//game setup and preferences
-	public static void main(String[] args){
+	public synchronized static void main(String[] args){
 		JFrame frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(135,206,250));
 		frame.setTitle("New Chess Game");
@@ -64,7 +64,7 @@ class Start{
 			boardNames[i] = boardFiles[i].getName().replace(".brd", "");
 		}
 		
-		JComboBox boards = new JComboBox(boardNames);
+		JComboBox<String> boards = new JComboBox<String>(boardNames);
 		boards.setSelectedItem("DefaultBoard");
 		constraints.gridx = 1;
 		constraints.gridy = 3;
@@ -78,20 +78,18 @@ class Start{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BoardMaker customBoard = new BoardMaker();
-				// customBoard.addPropertyChangeListener(new PropertyChangeListener(){
-				// 	@Override
-				// 	public void propertyChange(PropertyChangeEvent evt) {
-				// 		System.out.println(evt.getPropertyName());
-				// 		File[] boardFiles = {new File("resources" + File.separator + "boards" + File.separator + "DefaultBoard.brd")};
-				// 		try {
-				// 			boardFiles = BoardIO.availableBoards();
-				// 		} catch (Exception e){}
-				// 		String[] boardNames = new String[boardFiles.length];
-				// 		for (int i = 0; i<boardFiles.length; i++){
-				// 			boardNames[i] = boardFiles[i].getName().replace(".brd", "");
-				// 		}
-				// 	}
-				// });
+				try {
+					wait(1000);
+				} catch (InterruptedException ie){
+					File[] boardFiles = {new File("resources" + File.separator + "boards" + File.separator + "DefaultBoard.brd")};
+					try {
+						boardFiles = BoardIO.availableBoards();
+					} catch (Exception exc){}
+					boards.removeAll();
+					for (int i = 0; i<boardFiles.length; i++){
+						boards.addItem(boardFiles[i].getName().replace(".brd", ""));
+					}					
+				}
 			}
 		});
 		
