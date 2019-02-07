@@ -78,18 +78,6 @@ class Start{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BoardMaker customBoard = new BoardMaker();
-				try {
-					wait(1000);
-				} catch (InterruptedException ie){
-					File[] boardFiles = {new File("resources" + File.separator + "boards" + File.separator + "DefaultBoard.brd")};
-					try {
-						boardFiles = BoardIO.availableBoards();
-					} catch (Exception exc){}
-					boards.removeAll();
-					for (int i = 0; i<boardFiles.length; i++){
-						boards.addItem(boardFiles[i].getName().replace(".brd", ""));
-					}					
-				}
 			}
 		});
 		

@@ -189,7 +189,6 @@ class BoardMaker extends JFrame{
 		} catch (Exception e){
 			
 		}
-		notify();
 		setVisible(true);
 	}
 
