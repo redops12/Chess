@@ -159,8 +159,8 @@ class BoardMaker extends JFrame{
 				}
 
 				BoardIO.newBoard(board, tempBoardName);
+				Start.main(new String[1]);
 				setVisible(false);
-                System.exit(0);
             }
 		});
 
