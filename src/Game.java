@@ -10,6 +10,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.io.File;
 import java.awt.Image;
+import java.lang.Thread;
 
 class Game extends JComponent{
 	//names for the sides
@@ -66,6 +67,9 @@ class Game extends JComponent{
 						opposingSide = boardOrient;
 						boardOrient = tempSide;
 						board.setOrient(boardOrient);
+						try {
+							Thread.sleep(250);
+						} catch (Exception exc){}
 					}
 				}
 				moves.clear();
